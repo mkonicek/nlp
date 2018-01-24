@@ -14,7 +14,7 @@ $ python3 main.py
 
 Try to edit the code to explore the word embeddings!
 
-This repo only includes a tiny sample with 1000 words. To get interesting results you'll need to download the [pre-trained word vectors from the fastText website](https://fasttext.cc/docs/en/english-vectors.html).
+This repo only includes a tiny sample data file with 1000 words. To get interesting results you'll need to download the [pre-trained word vectors from the fastText website](https://fasttext.cc/docs/en/english-vectors.html).
 
 But don't use the whole 2GB file! The program would use too much memory. Instead, once you download the file, take only the top n words, save them to a separate file, and remove the first line. For example:
 
