@@ -33,7 +33,7 @@ def load_words_raw(file_path: str) -> List[Word]:
     """Load the file as-is, without doing any validation or cleanup."""
     def parse_line(line: str, frequency: int) -> Word:
         tokens = line.split()
-        word = tokens[0].lower()
+        word = tokens[0]
         vector = [float(x) for x in tokens[1:]]
         return Word(word, vector, frequency)
 
