@@ -74,7 +74,7 @@ def remove_duplicates(words: List[Word]) -> List[Word]:
     seen_words: Set[str] = set()
     unique_words: List[Word] = []
     for w in words:
-        canonical = ignore_char_regex.sub("", w.word)
+        canonical = ignore_char_regex.sub("", w.text)
         if not canonical in seen_words:
             seen_words.add(canonical)
             # Keep the original ordering
@@ -83,10 +83,10 @@ def remove_duplicates(words: List[Word]) -> List[Word]:
 
 def remove_stop_words(words: List[Word]) -> List[Word]:
     return [w for w in words if (
-        len(w.word) > 1 and is_valid_word.match(w.word))]
+        len(w.text) > 1 and is_valid_word.match(w.text))]
 
 # Run "smoke tests" on import
-assert [w.word for w in remove_stop_words([
+assert [w.text for w in remove_stop_words([
     Word('a', [], 1),
     Word('ab', [], 1),
     Word('-ab', [], 1),
@@ -95,7 +95,7 @@ assert [w.word for w in remove_stop_words([
     Word('.a', [], 1),
     Word('ab', [], 1),
 ])] == ['ab', 'ab']
-assert [w.word for w in remove_duplicates([
+assert [w.text for w in remove_duplicates([
     Word('a.b', [], 1),
     Word('-a-b', [], 1),
     Word('ab_+', [], 1),

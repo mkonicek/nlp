@@ -36,11 +36,11 @@ def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Wo
 
 def print_most_similar(words: List[Word], text: str) -> None:
     base_word = find_word(text, words)
-    print(f"Words related to {base_word.word}:")
+    print(f"Words related to {base_word.text}:")
     sorted_by_distance = [
-        word.word for (dist, word) in
+        word.text for (dist, word) in
             most_similar(base_word.vector, words)
-            if word.word.lower() != base_word.word.lower()
+            if word.text.lower() != base_word.text.lower()
         ]
     print(', '.join(sorted_by_distance[:10]))
 
@@ -48,14 +48,18 @@ def read_word() -> str:
     return input("Type a word: ")
 
 def find_word(text: str, words: List[Word]) -> Word:
-    return next(w for w in words if text == w.word)
+    return next(w for w in words if text == w.text)
 
-def closest_analogies(left2: str, left1: str, right2: str, words: List[Word]) -> List[Tuple[float, Word]]:
+def closest_analogies(
+    left2: str, left1: str, right2: str, words: List[Word]
+) -> List[Tuple[float, Word]]:
     word_left1 = find_word(left1, words)
     word_left2 = find_word(left2, words)
     word_right2 = find_word(right2, words)
-    vector = add_vectors(sub_vectors(word_left1.vector, word_left2.vector), word_right2.vector)
-    closest = most_similar(vector, words)[:8]
+    vector = add_vectors(
+        sub_vectors(word_left1.vector, word_left2.vector),
+        word_right2.vector)
+    closest = most_similar(vector, words)[:10]
     def is_redundant(word: str) -> bool:
         """
         Sometimes the two left vectors are so close the answer is e.g.
@@ -63,8 +67,11 @@ def closest_analogies(left2: str, left1: str, right2: str, words: List[Word]) ->
         suggestion, which might be more interesting.
         """
         word_lower = word.lower()
-        return left1.lower() in word_lower or left2.lower() in word_lower or right2.lower() in word_lower
-    closest_filtered = [(dist, w) for (dist, w) in closest if not is_redundant(w.word)]
+        return (
+            left1.lower() in word_lower or
+            left2.lower() in word_lower or
+            right2.lower() in word_lower)
+    closest_filtered = [(dist, w) for (dist, w) in closest if not is_redundant(w.text)]
     return closest_filtered
 
 def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> None:
@@ -73,28 +80,34 @@ def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> Non
         print(f"{left2}-{left1} is like {right2}-?")
     else:
         (dist, w) = analogies[0]
-        print(f"{left2}-{left1} is like {right2}-{w.word}")
+        #alternatives = ', '.join([f"{w.text} ({dist})" for (dist, w) in analogies])
+        print(f"{left2}-{left1} is like {right2}-{w.text}")
 
 words = load_words('data/words.vec')
 
-# print_most_similar(words, 'school')
-# print_most_similar(words, 'apple')
-# print_most_similar(words, 'spain')
-# print_most_similar(words, words[150].word)
-# print_most_similar(words, words[1150].word)
-# print_most_similar(words, words[2150].word)
-# print_most_similar(words, words[3150].word)
-# print_most_similar(words, words[4150].word)
+# print_most_similar(words, words[150].text)
+# print_most_similar(words, words[1150].text)
+# print_most_similar(words, words[2150].text)
+# print_most_similar(words, words[3150].text)
+# print_most_similar(words, words[4150].text)
 
+print_analogy('clothing', 'shirt' , 'electronics', words)
+print_analogy('walk', 'walked' , 'go', words)
+print_analogy('do', 'done' , 'go', words)
+print_analogy('quick', 'quickest' , 'far', words)
+print_analogy('book', 'reading' , 'TV', words)
+print_analogy('sushi', 'rice', 'pizza', words)
+print_analogy('sushi', 'rice', 'steak', words)
 print_analogy('Paris', 'France', 'Rome', words)
-print_analogy('shirt', 'clothing', 'bowl', words)  # Bad
-print_analogy('shirt', 'clothing', 'phone', words)  # Bad
-print_analogy('friend', 'smile', 'enemy', words)  # Bad
-print_analogy('sushi', 'fish', 'haggis', words) # Bad
-print_analogy('sushi', 'fish', 'pizza', words) # Bad
-print_analogy('dog', 'mammal', 'eagle', words) # Bad
-print_analogy('mouse', 'mammal', 'tuna', words) # Bad
-print_analogy('book', 'reading' , 'tv', words)  # Bad
+print_analogy('shirt', 'clothes', 'bowl', words)
+print_analogy('shirt', 'clothes', 'phone', words)
+print_analogy('shirt', 'clothing', 'bowl', words)
+print_analogy('shirt', 'clothing', 'phone', words)
+print_analogy('friend', 'smile', 'enemy', words)
+print_analogy('sushi', 'fish', 'haggis', words)
+print_analogy('sushi', 'fish', 'pizza', words)
+print_analogy('dog', 'mammal', 'eagle', words)
+print_analogy('mouse', 'mammal', 'tuna', words)
 print_analogy('Frances', 'girl', 'Martin', words)
 print_analogy('man', 'king', 'woman', words)
 print_analogy('UK', 'London', 'Thailand', words)
@@ -105,6 +118,7 @@ print_analogy('German', 'Opel', 'American', words)
 print_analogy('BMW', 'German' , 'Chrysler', words)
 print_analogy('Sushi', 'Japan' , 'Haggis', words)
 
+# analogies (interactive)
 while False:
     word1 = find_word(read_word(), words)
     if not word1:
@@ -121,6 +135,7 @@ while False:
     vector = add_vectors(sub_vectors(word1.vector, word2.vector), word3.vector)
     print_analogy(word1, word2, word3, words)
 
+# Related words (interactive)
 while False:
     text = read_word()
     w = find_word(text, words)
