@@ -3,7 +3,7 @@ import math
 from load import load_words
 from word import Word, Vector
 from operator import itemgetter
-from typing import Any, Iterable, List, Set, Tuple
+from typing import Any, Iterable, List, Optional, Set, Tuple
 
 def vector_len(v: Vector) -> float:
     return math.sqrt(sum([x*x for x in v]))
@@ -36,6 +36,9 @@ def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Wo
 
 def print_most_similar(words: List[Word], text: str) -> None:
     base_word = find_word(text, words)
+    if not base_word:
+        print(f"Uknown word: {text}")
+        return
     print(f"Words related to {base_word.text}:")
     sorted_by_distance = [
         word.text for (dist, word) in
@@ -47,8 +50,11 @@ def print_most_similar(words: List[Word], text: str) -> None:
 def read_word() -> str:
     return input("Type a word: ")
 
-def find_word(text: str, words: List[Word]) -> Word:
-    return next(w for w in words if text == w.text)
+def find_word(text: str, words: List[Word]) -> Optional[Word]:
+    try:
+       return next(w for w in words if text == w.text)
+    except StopIteration:
+       return None
 
 def closest_analogies(
     left2: str, left1: str, right2: str, words: List[Word]
@@ -56,6 +62,8 @@ def closest_analogies(
     word_left1 = find_word(left1, words)
     word_left2 = find_word(left2, words)
     word_right2 = find_word(right2, words)
+    if (not word_left1) or (not word_left2) or (not word_right2):
+        return []
     vector = add_vectors(
         sub_vectors(word_left1.vector, word_left2.vector),
         word_right2.vector)
@@ -83,57 +91,41 @@ def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> Non
         #alternatives = ', '.join([f"{w.text} ({dist})" for (dist, w) in analogies])
         print(f"{left2}-{left1} is like {right2}-{w.text}")
 
-words = load_words('data/words.vec')
+words = load_words('data/words-short.vec')
 
-# print_most_similar(words, words[150].text)
-# print_most_similar(words, words[1150].text)
-# print_most_similar(words, words[2150].text)
-# print_most_similar(words, words[3150].text)
-# print_most_similar(words, words[4150].text)
+print_most_similar(words, words[190].text)
+print_most_similar(words, words[230].text)
+print_most_similar(words, words[330].text)
+print_most_similar(words, words[430].text)
 
-print_analogy('clothing', 'shirt' , 'electronics', words)
-print_analogy('walk', 'walked' , 'go', words)
-print_analogy('do', 'done' , 'go', words)
-print_analogy('quick', 'quickest' , 'far', words)
-print_analogy('book', 'reading' , 'TV', words)
-print_analogy('sushi', 'rice', 'pizza', words)
-print_analogy('sushi', 'rice', 'steak', words)
-print_analogy('Paris', 'France', 'Rome', words)
-print_analogy('shirt', 'clothes', 'bowl', words)
-print_analogy('shirt', 'clothes', 'phone', words)
-print_analogy('shirt', 'clothing', 'bowl', words)
-print_analogy('shirt', 'clothing', 'phone', words)
-print_analogy('friend', 'smile', 'enemy', words)
-print_analogy('sushi', 'fish', 'haggis', words)
-print_analogy('sushi', 'fish', 'pizza', words)
-print_analogy('dog', 'mammal', 'eagle', words)
-print_analogy('mouse', 'mammal', 'tuna', words)
-print_analogy('Frances', 'girl', 'Martin', words)
-print_analogy('man', 'king', 'woman', words)
-print_analogy('UK', 'London', 'Thailand', words)
-print_analogy('English', 'Jaguar', 'German', words)
-print_analogy('English', 'Vauxhall', 'German', words)
-print_analogy('German', 'BMW' , 'American', words)
-print_analogy('German', 'Opel', 'American', words)
-print_analogy('BMW', 'German' , 'Chrysler', words)
-print_analogy('Sushi', 'Japan' , 'Haggis', words)
+print("")
 
-# analogies (interactive)
+print_analogy('man', 'him' , 'woman', words)
+# You'll need to download the pretrained word vectors to complete the analogies
+# below:
+# https://fasttext.cc/docs/en/english-vectors.html
+#print_analogy('quick', 'quickest' , 'far', words)
+#print_analogy('sushi', 'rice', 'pizza', words)
+#print_analogy('Paris', 'France', 'Rome', words)
+#print_analogy('dog', 'mammal', 'eagle', words)
+#print_analogy('German', 'BMW' , 'American', words)
+#print_analogy('German', 'Opel', 'American', words)
+
+# Analogies (interactive)
 while False:
-    word1 = find_word(read_word(), words)
-    if not word1:
+    left2 = find_word(read_word(), words)
+    if not left2:
         print("Sorry, I don't know that word.")
         continue
-    word2 = find_word(read_word(), words)
-    if not word2:
+    left1 = find_word(read_word(), words)
+    if not left1:
         print("Sorry, I don't know that word.")
         continue
-    word3 = find_word(read_word(), words)
-    if not word3:
+    right2 = find_word(read_word(), words)
+    if not right2:
         print("Sorry, I don't know that word.")
         continue
-    vector = add_vectors(sub_vectors(word1.vector, word2.vector), word3.vector)
-    print_analogy(word1, word2, word3, words)
+    print_analogy(left2, left1, right2, words)
 
 # Related words (interactive)
 while False:
