@@ -12,7 +12,7 @@ After you clone this repo, you can simply run:
 $ python3 main.py
 ```
 
-Try to edit the code to explore the word embeddings!
+Try to edit the code to explore the word embeddings.
 
 This repo only includes a tiny sample data file with 1000 words. To get interesting results you'll need to download the [pre-trained word vectors from the fastText website](https://fasttext.cc/docs/en/english-vectors.html).
 
