@@ -3,14 +3,20 @@ from typing import Any, Iterable, List, Optional, Set, Tuple
 from load import load_words
 import math
 from operator import itemgetter
+import time
 import vectors as v
 from word import Word, Vector
 
+# Timing info for most_similar (100k words):
+# Original version: 7.3s
+
 def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Word]]:
+    start = time.time()
     """Finds n words with smallest cosine similarity to a given word"""
     words_with_distance = [(v.cosine_similarity(base_vector, w.vector), w) for w in words]
     # We want cosine similarity to be as large as possible (close to 1)
     sorted_by_distance = sorted(words_with_distance, key=lambda t: t[0], reverse=True)
+    print(f"Elapsed {time.time() - start} s")
     return sorted_by_distance
 
 def print_most_similar(words: List[Word], text: str) -> None:
@@ -70,7 +76,7 @@ def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> Non
         #alternatives = ', '.join([f"{w.text} ({dist})" for (dist, w) in analogies])
         print(f"{left2}-{left1} is like {right2}-{w.text}")
 
-words = load_words('data/words-short.vec')
+words = load_words('data/words.vec')
 
 print_most_similar(words, words[190].text)
 print_most_similar(words, words[230].text)
@@ -83,12 +89,12 @@ print_analogy('man', 'him' , 'woman', words)
 # You'll need to download the pretrained word vectors to complete the analogies
 # below:
 # https://fasttext.cc/docs/en/english-vectors.html
-#print_analogy('quick', 'quickest' , 'far', words)
-#print_analogy('sushi', 'rice', 'pizza', words)
-#print_analogy('Paris', 'France', 'Rome', words)
-#print_analogy('dog', 'mammal', 'eagle', words)
-#print_analogy('German', 'BMW' , 'American', words)
-#print_analogy('German', 'Opel', 'American', words)
+print_analogy('quick', 'quickest' , 'far', words)
+print_analogy('sushi', 'rice', 'pizza', words)
+print_analogy('Paris', 'France', 'Rome', words)
+print_analogy('dog', 'mammal', 'eagle', words)
+print_analogy('German', 'BMW' , 'American', words)
+print_analogy('German', 'Opel', 'American', words)
 
 # Analogies (interactive)
 while False:
