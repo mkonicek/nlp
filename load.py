@@ -3,13 +3,13 @@ Load the input file (see https://fasttext.cc/docs/en/english-vectors.html)
 and do some cleanup.
 """
 
-import re
-
-from word import Word
+from typing import Iterable, List, Set
 
 from itertools import groupby
 from operator import itemgetter
-from typing import Iterable, List, Set
+import re
+import vectors as v
+from word import Word
 
 def load_words(file_path: str) -> List[Word]:
     """Load and cleanup the data."""
@@ -17,9 +17,9 @@ def load_words(file_path: str) -> List[Word]:
     words = load_words_raw(file_path)
     print(f"Loaded {len(words)} words.")
 
-    num_dimensions = most_common_dimension(words)
-    words = [w for w in words if len(w.vector) == num_dimensions]
-    print(f"Using {num_dimensions}-dimensional vectors, {len(words)} remain.")
+    #num_dimensions = most_common_dimension(words)
+    words = [w for w in words if len(w.vector) == 300]
+    #print(f"Using {num_dimensions}-dimensional vectors, {len(words)} remain.")
 
     words = remove_stop_words(words)
     print(f"Removed stop words, {len(words)} remain.")
@@ -34,7 +34,7 @@ def load_words_raw(file_path: str) -> List[Word]:
     def parse_line(line: str, frequency: int) -> Word:
         tokens = line.split()
         word = tokens[0]
-        vector = [float(x) for x in tokens[1:]]
+        vector = v.normalize([float(x) for x in tokens[1:]])
         return Word(word, vector, frequency)
 
     words = []
@@ -60,7 +60,7 @@ def most_common_dimension(words: List[Word]) -> int:
     print("Dimensions:")
     for (dim, num_vectors) in dimensions:
         print(f"{num_vectors} {dim}-dimensional vectors")
-    most_common = sorted(dimensions, key=itemgetter(1), reverse=True)[0]
+    most_common = sorted(dimensions, key=lambda t: t[1], reverse=True)[0]
     return most_common[0]
 
 # We want to ignore these characters,
