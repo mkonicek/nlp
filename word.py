@@ -1,6 +1,5 @@
 from typing import List
-
-Vector = List[float]
+from vectors import Vector
 
 class Word:
     """A single word (one line of the input file)"""
