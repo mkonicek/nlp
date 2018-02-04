@@ -6,6 +6,7 @@ and do some cleanup.
 from typing import Iterable, List, Set
 
 from itertools import groupby
+import numpy as np
 from operator import itemgetter
 import re
 import vectors as v
@@ -34,7 +35,7 @@ def load_words_raw(file_path: str) -> List[Word]:
     def parse_line(line: str, frequency: int) -> Word:
         tokens = line.split()
         word = tokens[0]
-        vector = v.normalize([float(x) for x in tokens[1:]])
+        vector = v.normalize(np.array([float(x) for x in tokens[1:]]))
         return Word(word, vector, frequency)
 
     words = []

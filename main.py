@@ -7,9 +7,10 @@ import vectors as v
 from vectors import Vector
 from word import Word
 
-# Timing info for most_similar (100k words):
-# Original version: 7.3s
-# Normalized vectors: 3.4s
+# Timing for most_similar (100k words):
+# Original version: 7.3s per call
+# Normalized vectors: 3.4s per call
+# Numpy: 0.27s per call (12x speedup), 300MB memory total
 
 def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Word]]:
     start = time.time()
