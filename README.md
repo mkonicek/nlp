@@ -21,3 +21,7 @@ But don't use the whole 2GB file! The program would use too much memory. Instead
 ```
 $ cat data/wiki-news-300d-1M.vec | head -n 50001 | tail -n 50000 > data/vectors.vec
 ```
+
+## LICENSE
+
+MIT
