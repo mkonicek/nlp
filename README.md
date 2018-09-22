@@ -22,6 +22,16 @@ But don't use the whole 2GB file! The program would use too much memory. Instead
 $ cat data/wiki-news-300d-1M.vec | head -n 50001 | tail -n 50000 > data/vectors.vec
 ```
 
+## Using numpy?
+
+The code doesn't use [numpy](http://www.numpy.org/) or any third party dependencies. This is so that anyone can run the code easily using vanilla Python 3.
+
+There is a [separate branch](https://github.com/mkonicek/nlp/tree/numpy) that uses numpy for the vector math and achieves about 12x speedup on my laptop.
+
+## Type annotations
+
+I'm using the [mypy type checker](http://mypy-lang.org/) to find bugs as I type in Atom (using this [Atom plugin](https://atom.io/packages/linter-mypy)). However, you don't need to have mypy installed. Python 3 will run the code fine.
+
 ## LICENSE
 
 MIT
