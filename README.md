@@ -2,7 +2,7 @@
 
 This code lets you experiment with pre-trained word embeddings using plain Python 3 with no additional dependencies.
 
-See the blogpost [Playing with word vectors](https://medium.com/@martinkonicek/playing-with-word-vectors-308ab2faa519) for a detailed explanation.
+See the blog post [Playing with word vectors](https://coding-time.co/playing-with-word-vectors) for a detailed explanation.
 
 ## Usage
 
