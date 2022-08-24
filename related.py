@@ -22,12 +22,12 @@ def print_related_words(words: List[Word], text: str) -> None:
         print(f"Unknown word: {text}")
         return
     related_words_list = related_words(base_word.vector, words)
-    sorted_by_distance = [
+    res = [
         word.text for (_, word) in
         related_words_list
         if word.text.lower() != base_word.text.lower()
     ]
-    print(', '.join(sorted_by_distance[:10]))
+    print(', '.join(res[:10]))
 
 
 words = load_words(WORDS_FILE_NAME)
