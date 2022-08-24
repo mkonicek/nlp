@@ -56,8 +56,9 @@ def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> Non
     if (len(analogies) == 0):
         print(f"{left2}-{left1} is like {right2}-?")
     else:
-        (dist, w) = analogies[0]
-        #alternatives = ', '.join([f"{w.text} ({dist})" for (dist, w) in analogies])
+        (_, w) = analogies[0]
+        # alternatives = ', '.join(
+        #    [f"{w.text} ({dist:.2f})" for (dist, w) in analogies])
         print(f"{left2}-{left1} is like {right2}-{w.text}")
 
 
