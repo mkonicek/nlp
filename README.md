@@ -30,7 +30,7 @@ There is a [separate branch](https://github.com/mkonicek/nlp/tree/numpy) that us
 
 ## Type annotations
 
-I'm using the [mypy type checker](http://mypy-lang.org/) to find bugs as I type in Atom (using this [Atom plugin](https://atom.io/packages/linter-mypy)). However, you don't need to have mypy installed. Python 3 will run the code fine.
+I'm using the [mypy type checker](http://mypy-lang.org/) to find bugs as I type in VS Code (using this [plugin](https://marketplace.visualstudio.com/items?itemName=matangover.mypy)). However, you don't need to have mypy installed. Python 3 will run the code just fine.
 
 ## LICENSE
 

@@ -1,12 +1,10 @@
 """
-Load the input file (see https://fasttext.cc/docs/en/english-vectors.html)
-and do some cleanup.
+Load the input file and do some cleanup.
 """
 
 from typing import Iterable, List, Set
 
 from itertools import groupby
-from operator import itemgetter
 import re
 import vectors as v
 from word import Word

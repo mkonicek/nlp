@@ -1,16 +1,15 @@
 from typing import List, Optional, Tuple
 
 from load import load_words
-import vectors as v
-from vectors import Vector
+from vectors import Vector, add, sub, cosine_similarity_normalized
 from word import Word
 
-WORDS_FILE_NAME = 'data/words-short.vec'
+WORDS_FILE_NAME = 'data/words.vec'
 
 
 def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Word]]:
     """Finds n words with smallest cosine similarity to a given word"""
-    words_with_distance = [(v.cosine_similarity_normalized(
+    words_with_distance = [(cosine_similarity_normalized(
         base_vector, w.vector), w) for w in words]
     # We want cosine similarity to be as large as possible (close to 1)
     sorted_by_distance = sorted(
@@ -23,13 +22,13 @@ def print_most_similar(words: List[Word], text: str) -> None:
     if not base_word:
         print(f"Unknown word: {text}")
         return
-    print(f"Words related to {base_word.text}:")
     sorted_by_distance = [
         word.text for (_, word) in
         most_similar(base_word.vector, words)
         if word.text.lower() != base_word.text.lower()
     ]
-    print(', '.join(sorted_by_distance[:10]))
+    print(f"Words related to {base_word.text}: " +
+          ', '.join(sorted_by_distance[:10]))
 
 
 def read_word() -> str:
@@ -47,13 +46,21 @@ def closest_analogies(
     left2: str, left1: str, right2: str, words: List[Word]
 ) -> List[Tuple[float, Word]]:
     word_left1 = find_word(left1, words)
-    word_left2 = find_word(left2, words)
-    word_right2 = find_word(right2, words)
-    if (not word_left1) or (not word_left2) or (not word_right2):
+    if not word_left1:
+        print(f"Unknown word: {left1}")
         return []
-    vector = v.add(
-        v.sub(word_left1.vector, word_left2.vector),
-        word_right2.vector)
+
+    word_left2 = find_word(left2, words)
+    if not word_left2:
+        print(f"Unknown word: {left2}")
+        return []
+
+    word_right2 = find_word(right2, words)
+    if not word_right2:
+        print(f"Unknown word: {right2}")
+        return []
+
+    vector = add(sub(word_left1.vector, word_left2.vector), word_right2.vector)
     closest = most_similar(vector, words)[:10]
 
     def is_redundant(word: str) -> bool:
@@ -100,29 +107,21 @@ print_analogy('Paris', 'France', 'Rome', words)
 print_analogy('dog', 'mammal', 'eagle', words)
 print_analogy('German', 'BMW', 'American', words)
 print_analogy('German', 'Opel', 'American', words)
-print_analogy('shirt', 'clothing', 'phone', words)
-
-# Analogies (interactive)
-while False:
-    left2 = find_word(read_word(), words)
-    if not left2:
-        print("I don't know that word.")
-        continue
-    left1 = find_word(read_word(), words)
-    if not left1:
-        print("I don't know that word.")
-        continue
-    right2 = find_word(read_word(), words)
-    if not right2:
-        print("I don't know that word.")
-        continue
-    print_analogy(left2, left1, right2, words)
+print_analogy('hat', 'head', 'shoe', words)
+print_analogy('tooth', 'dentist', 'hair', words)
+print_analogy('tooth', 'dentist', 'eye', words)
+print_analogy('tooth', 'sweet', 'eye', words)
+print_analogy('tooth', 'sweet', 'barber', words)
+print_analogy('finger', 'touch', 'eye', words)
 
 # Related words (interactive)
-while False:
+while True:
     text = read_word()
-    w = find_word(text, words)
-    if not w:
-        print("I don't know that word.")
-    else:
-        print_most_similar(w)
+    print_most_similar(words, text)
+
+# Analogies (interactive)
+while True:
+    left2 = read_word()
+    left1 = read_word()
+    right2 = read_word()
+    print_analogy(left2, left1, right2, words)
