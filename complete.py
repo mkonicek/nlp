@@ -1,45 +1,19 @@
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 from load import load_words
 from vectors import Vector, add, sub, cosine_similarity_normalized
-from word import Word
+from word import Word, find_word
 
 WORDS_FILE_NAME = 'data/words.vec'
 
 
-def most_similar(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Word]]:
-    """Finds n words with smallest cosine similarity to a given word"""
+def related_words(base_vector: Vector, words: List[Word]) -> List[Tuple[float, Word]]:
     words_with_distance = [(cosine_similarity_normalized(
         base_vector, w.vector), w) for w in words]
     # We want cosine similarity to be as large as possible (close to 1)
     sorted_by_distance = sorted(
         words_with_distance, key=lambda t: t[0], reverse=True)
     return sorted_by_distance
-
-
-def print_most_similar(words: List[Word], text: str) -> None:
-    base_word = find_word(text, words)
-    if not base_word:
-        print(f"Unknown word: {text}")
-        return
-    sorted_by_distance = [
-        word.text for (_, word) in
-        most_similar(base_word.vector, words)
-        if word.text.lower() != base_word.text.lower()
-    ]
-    print(f"Words related to {base_word.text}: " +
-          ', '.join(sorted_by_distance[:10]))
-
-
-def read_word() -> str:
-    return input("Type a word: ")
-
-
-def find_word(text: str, words: List[Word]) -> Optional[Word]:
-    try:
-        return next(w for w in words if text == w.text)
-    except StopIteration:
-        return None
 
 
 def closest_analogies(
@@ -61,7 +35,7 @@ def closest_analogies(
         return []
 
     vector = add(sub(word_left1.vector, word_left2.vector), word_right2.vector)
-    closest = most_similar(vector, words)[:10]
+    closest_list = related_words(vector, words)[:10]
 
     def is_redundant(word: str) -> bool:
         """
@@ -75,7 +49,7 @@ def closest_analogies(
             left2.lower() in word_lower or
             right2.lower() in word_lower)
     closest_filtered = [(dist, w)
-                        for (dist, w) in closest if not is_redundant(w.text)]
+                        for (dist, w) in closest_list if not is_redundant(w.text)]
     return closest_filtered
 
 
@@ -114,14 +88,9 @@ print_analogy('tooth', 'sweet', 'eye', words)
 print_analogy('tooth', 'sweet', 'barber', words)
 print_analogy('finger', 'touch', 'eye', words)
 
-# Related words (interactive)
 while True:
-    text = read_word()
-    print_most_similar(words, text)
-
-# Analogies (interactive)
-while True:
-    left2 = read_word()
-    left1 = read_word()
-    right2 = read_word()
+    left2 = input("Type a word: ")
+    left1 = input("Type a word: ")
+    right2 = input("Type a word: ")
     print_analogy(left2, left1, right2, words)
+    print("")
