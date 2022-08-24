@@ -38,11 +38,9 @@ def closest_analogies(
     closest_list = related_words(vector, words)[:10]
 
     def is_redundant(word: str) -> bool:
-        """
-        Sometimes the two left vectors are so close the answer is e.g.
-        "shirt-clothing is like phone-phones". Skip 'phones' and get the next
-        suggestion, which might be more interesting.
-        """
+        # Sometimes the two left vectors are so close the answer is e.g.
+        # "shirt-clothing is like phone-phones". Skip 'phones' and get the next
+        # suggestion, which might be more interesting.
         word_lower = word.lower()
         return (
             left1.lower() in word_lower or
