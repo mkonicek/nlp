@@ -17,7 +17,7 @@ and:
 
 ```sh
 # Complete analogies
-$ python3 complete.py
+$ python3 analogies.py
 ```
 
 Try to edit the code to explore the word embeddings.
