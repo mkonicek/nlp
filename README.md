@@ -9,7 +9,15 @@ See the blog post [Playing with Word Vectors](https://coding-time.co/playing-wit
 Once you clone this repo, you can simply run:
 
 ```
-$ python3 main.py
+# Find words related to given word
+$ python3 related.py
+```
+
+and:
+
+```
+# Complete analogies
+$ python3 complete.py
 ```
 
 Try to edit the code to explore the word embeddings.
