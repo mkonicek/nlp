@@ -21,8 +21,11 @@ def load_words(file_path: str) -> List[Word]:
     frequency = 1
     with open(file_path) as f:
         for line in f:
-            w = parse_line(line, frequency)
-            words.append(w)
+            try:
+                w = parse_line(line, frequency)
+                words.append(w)
+            except:
+                continue
             frequency += 1
 
     words = [w for w in words if len(w.vector) == 300]
