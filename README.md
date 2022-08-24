@@ -8,14 +8,14 @@ See the blog post [Playing with Word Vectors](https://coding-time.co/playing-wit
 
 Once you clone this repo, you can simply run:
 
-```
+```sh
 # Find words related to given word
 $ python3 related.py
 ```
 
 and:
 
-```
+```sh
 # Complete analogies
 $ python3 complete.py
 ```
