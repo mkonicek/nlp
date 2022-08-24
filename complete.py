@@ -64,29 +64,7 @@ def print_analogy(left2: str, left1: str, right2: str, words: List[Word]) -> Non
 
 
 words = load_words(WORDS_FILE_NAME)
-
-# print_most_similar(words, words[190].text)
-# print_most_similar(words, words[230].text)
-# print_most_similar(words, words[330].text)
-# print_most_similar(words, words[430].text)
-
 print("")
-
-# You'll need to download the pre-trained word vectors to complete the analogies
-# below:
-# https://fasttext.cc/docs/en/english-vectors.html
-print_analogy('quick', 'quickest', 'far', words)
-print_analogy('sushi', 'rice', 'pizza', words)
-print_analogy('Paris', 'France', 'Rome', words)
-print_analogy('dog', 'mammal', 'eagle', words)
-print_analogy('German', 'BMW', 'American', words)
-print_analogy('German', 'Opel', 'American', words)
-print_analogy('hat', 'head', 'shoe', words)
-print_analogy('tooth', 'dentist', 'hair', words)
-print_analogy('tooth', 'dentist', 'eye', words)
-print_analogy('tooth', 'sweet', 'eye', words)
-print_analogy('tooth', 'sweet', 'barber', words)
-print_analogy('finger', 'touch', 'eye', words)
 
 while True:
     left2 = input("Type a word: ")
